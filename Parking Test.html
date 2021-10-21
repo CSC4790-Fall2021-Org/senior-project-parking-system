@@ -1,0 +1,145 @@
+<html>
+    <head>
+            <title> JavaScript calculations Demo </title>
+            
+    </head>
+    <body>
+        <p>This is the test parking system</p>
+        <p>IN: <span id="IN"></span></p>
+        <p>CASH: $<span id="cash"></span> (<span id="cashcount"></span>)</p>
+        <p>CREDIT: $<span id="credit"></span> (<span id="creditcount"></span>)</p>
+        <p>TOTAL: $<span id="totaldaily"></span></p>
+        <p>Ticket Price: $<select id="price" onchange="setPrice()">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+        </select> </p>
+        <button onclick = "cashTicket()" id="cashTicket">Cash</button>
+        <button onclick = "creditTicket()" id="creditTicket">C.C</button>
+        <button onclick = "reverseTicket()" id="remove">Reverse Last Ticket</button>
+        <button onclick = "printSummary()" id="summary">Print Summary</button>
+        <p><span id="licPlates"></span></p>
+        <script>    
+            var numbCars = 0;
+            var ticketPrice = 10;
+            var priceCount = [0,0,0];
+            var credit = 0;
+            var cash = 0;
+            var dailyTotal = 0;
+            var cashNo = 0;
+            var creditNo = 0;
+            var credPayment = 0;
+            var license;
+            let licenseStack = []
+            document.getElementById("IN").innerHTML = numbCars;
+            //document.getElementById("price").innerHTML = ticketPrice;
+            document.getElementById("credit").innerHTML = credit;
+            document.getElementById("cash").innerHTML = cash;
+
+            function checkPrice()
+            {
+                if(ticketPrice == 10)
+                    priceCount[0]++;
+                if(ticketPrice == 20)
+                    priceCount[1]++;
+                if(ticketPrice == 30)
+                    priceCount[1]++;
+                
+            }
+            function printSummary()
+            {
+                var summ = "\nTotal: " + dailyTotal;
+                licenseStack.push(summ);
+                summ = "\nCars at $10: " + priceCount[0];
+                licenseStack.push(summ);
+                summ = "\nCars at $20: " + priceCount[1];
+                licenseStack.push(summ);
+                summ = "\nCars at $30: " + priceCount[2];
+                licenseStack.push(summ);
+                document.getElementById("licPlates").innerHTML = licenseStack;
+
+            }
+
+            function reverseTicket()
+            {
+                //reverses the last ticket
+                if(credPayment == 0)
+                {
+                    cashNo--;
+                    cash -= ticketPrice;
+                }
+                else if(credPayment == 1)
+                {
+                    creditNo--;
+                    credit -= ticketPrice;
+                }
+
+                numbCars--;
+                dailyTotal -= ticketPrice;
+                licenseStack.pop();
+
+                document.getElementById("licPlates").innerHTML = licenseStack[licenseStack.length - 1];
+                document.getElementById("cash").innerHTML = cash;
+                document.getElementById("credit").innerHTML = credit;
+                document.getElementById("IN").innerHTML = numbCars;
+                document.getElementById("totaldaily").innerHTML = dailyTotal;
+                document.getElementById("cashcount").innerHTML = cashNo;
+                document.getElementById("creditcount").innerHTML = creditNo;
+
+            }
+
+            function setPrice()
+            {
+                var price = document.getElementById("price");
+                var p = price.value;
+                ticketPrice = parseInt(p);
+            }
+            function cashTicket()
+            {
+                license = window.prompt("Enter License Plate Number: ");
+                credPayment = 0;
+                numbCars++;
+                cash+=ticketPrice;
+                dailyTotal+=ticketPrice;
+                checkPrice();
+                var today = new Date();
+                var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                var dateTime = date+' '+time;
+                var carDet = license + "\n$" + ticketPrice + "\t" + dateTime + "\tCASH";
+                licenseStack.push(carDet);
+                document.getElementById("licPlates").innerHTML = licenseStack[licenseStack.length - 1];
+                document.getElementById("cash").innerHTML = cash;
+                document.getElementById("IN").innerHTML = numbCars;
+                document.getElementById("totaldaily").innerHTML = dailyTotal;
+                cashNo++;
+                document.getElementById("cashcount").innerHTML = cashNo;
+                
+            }
+
+            function creditTicket()
+            {
+                license = window.prompt("Enter License Plate Number: ");
+                credPayment = 1;
+                numbCars++;
+                credit+=ticketPrice;
+                dailyTotal+=ticketPrice;
+                checkPrice();
+                var today = new Date();
+                var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                var dateTime = date+' '+time;
+                var carDet = license + "\n$" + ticketPrice + "\t" + dateTime + "\tCREDIT/DEBIT";
+                licenseStack.push(carDet);
+                document.getElementById("licPlates").innerHTML = licenseStack[licenseStack.length - 1];
+                document.getElementById("IN").innerHTML = numbCars;
+                document.getElementById("totaldaily").innerHTML = dailyTotal;
+                document.getElementById("credit").innerHTML = credit;
+                creditNo++;
+                document.getElementById("creditcount").innerHTML = creditNo;
+
+            }
+            
+        </script>
+    </body>
+</html>
