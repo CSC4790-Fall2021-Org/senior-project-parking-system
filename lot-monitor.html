@@ -145,11 +145,13 @@
     document.getElementById("ticketPriceOne").innerHTML = ticketPrice;
     document.getElementById("creditOne").innerHTML = creditOne;
     document.getElementById("cashOne").innerHTML = cashOne;
+    document.getElementById("totaldailyOne").innerHTML = dailyTotalOne;
 
     document.getElementById("IN").innerHTML = numbCars;
     document.getElementById("ticketPrice").innerHTML = ticketPrice;
     document.getElementById("credit").innerHTML = credit;
     document.getElementById("cash").innerHTML = cash;
+    document.getElementById("totaldaily").innerHTML = dailyTotal;
 
     function setPrice(lot,index)
     {
@@ -181,7 +183,7 @@
       var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
       var dateTime = date+' '+time;
 
-      var ticketFormat = "License Plate \t -" +  lic + "- \n" + 
+      var ticketFormat = "License Plate \t -" +  lic[0] + "- \n" + 
                           "Date:" + date +
                           "\nTime:" + time +
                           "\n PARKING LOT " + lot + "RULES \n" + 
@@ -217,6 +219,7 @@
         document.getElementById("totaldailyOne").innerHTML = dailyTotalOne;
         document.getElementById("cashcountOne").innerHTML = cashNoOne;
         document.getElementById("creditcountOne").innerHTML = creditNoOne;
+        document.getElementById("licPlatesOne").innerHTML = "";
         licenseStack.pop();
 
     }
@@ -242,6 +245,7 @@
         document.getElementById("ticketPrice").innerHTML = ticketPrice;
         document.getElementById("cashcount").innerHTML = cashNo;
         document.getElementById("creditcount").innerHTML = creditNo;
+        document.getElementById("licPlates").innerHTML = "";
         licenseStack.pop();
 
     }
@@ -256,7 +260,7 @@
           dailyTotalOne+=ticketPrice;
           cashOne+=ticketPrice;
           //carDet = license + "\n$" + ticketPrice + "\t" + dateTime + "\tCASH"; 
-          licenseStackOne.push(license.toUpperCase());
+          licenseStackOne.push([license.toUpperCase(),ticketPrice]);
           //document.getElementById("licPlatesOne").innerHTML = licenseStackOne[licenseStackOne.length - 1];
           document.getElementById("cashOne").innerHTML = cashOne;
           document.getElementById("INOne").innerHTML = numbCarsOne;
@@ -272,7 +276,7 @@
           dailyTotal+=ticketPrice;
           cash+=ticketPrice;
           //carDet = license + "\n$" + ticketPrice + "\t" + dateTime + "\tCASH"; 
-          licenseStack.push(license.toUpperCase());
+          licenseStack.push([license.toUpperCase(),ticketPrice]);
           //document.getElementById("licPlates").innerHTML = licenseStack[licenseStack.length - 1];
           document.getElementById("cash").innerHTML = cash;
           document.getElementById("IN").innerHTML = numbCars;
@@ -294,7 +298,7 @@
           dailyTotalOne+=ticketPrice;
           creditOne+=ticketPrice;
           //carDet = license + "\n$" + ticketPrice + "\t" + dateTime + "\tCREDIT"; 
-          licenseStackOne.push(license.toUpperCase());
+          licenseStackOne.push([license.toUpperCase(),ticketPrice]);
           //document.getElementById("licPlatesOne").innerHTML = licenseStackOne[licenseStackOne.length - 1];
           document.getElementById("creditOne").innerHTML = creditOne;
           document.getElementById("INOne").innerHTML = numbCarsOne;
@@ -310,7 +314,7 @@
           dailyTotal+=ticketPrice;
           credit+=ticketPrice;
           //carDet = license + "\n$" + ticketPrice + "\t" + dateTime + "\tCREDIT"; 
-          licenseStack.push(license.toUpperCase());
+          licenseStack.push([license.toUpperCase(),ticketPrice]);
          //document.getElementById("licPlates").innerHTML = licenseStack[licenseStack.length - 1];
           document.getElementById("credit").innerHTML = credit;
           document.getElementById("IN").innerHTML = numbCars;
@@ -335,31 +339,68 @@
     }
     function printSummary(lot)
     {
+      prices = [10,15,20,25,30,40,50];
+      priceCount = [0,0,0,0,0,0,0];
+
       if(lot == 1)
       {
-        var summ = "\nTotal: " + dailyTotalOne;
-        licenseStackOne.push(summ);
-        summ = "\nCars at $10: " + priceCount[0];
-        licenseStack.push(summ);
-        summ = "\nCars at $20: " + priceCount[1];
-        licenseStack.push(summ);
-        summ = "\nCars at $30: " + priceCount[2];
-        licenseStack.push(summ);
-        document.getElementById("licPlatesOne").innerHTML = licenseStackOne;
+        for(var j = 0; j < prices.length; j++)
+        {
+          for(var i = 0; i < licenseStackOne.length; i++)
+          {
+            if(prices[j] == licenseStackOne[i][1])
+              priceCount[j]++;
+          }
+        }
+        
+      }
+      if(lot == 2)
+      {
+        for(var j = 0; j < prices.length; j++)
+        {
+          for(var i = 0; i < licenseStack.length; i++)
+          {
+            if(prices[j] == licenseStack[i][1])
+              priceCount[j]++;
+          }
+        } 
       }
 
+      var printout = "Ocean #" + lot + " Lot Summary:\n" + 
+      "Tickets At: " + "\n$10 - " + priceCount[0] + "\n$15 - " + priceCount[1] + "\n$20 - " + priceCount[2] + "\n$25 - " + priceCount[3] +
+       "\n$30 - " + priceCount[4] + "\n$40 - " + priceCount[5] + "\n$50 - " + priceCount[6];
+
+      if(lot == 1)
+       document.getElementById("licPlatesOne").innerHTML = printout;
       else
-      {
-        var summ = "\nTotal: " + dailyTotal;
-        licenseStack.push(summ);
-        summ = "\nCars at $10: " + priceCount[0];
-        licenseStack.push(summ);
-        summ = "\nCars at $20: " + priceCount[1];
-        licenseStack.push(summ);
-        summ = "\nCars at $30: " + priceCount[2];
-        licenseStack.push(summ);
-        document.getElementById("licPlates").innerHTML = licenseStack;
-      }
+      document.getElementById("licPlates").innerHTML = printout;
+      
+      
+      // if(lot == 1)
+      // {
+      //   var summ = "\nTotal: " + dailyTotalOne;
+      //   licenseStackOne.push(summ);
+      //   summ = "\nCars at $10: " + priceCount[0];
+      //   licenseStack.push(summ);
+      //   summ = "\nCars at $20: " + priceCount[1];
+      //   licenseStack.push(summ);
+      //   summ = "\nCars at $30: " + priceCount[2];
+      //   licenseStack.push(summ);
+      //   document.getElementById("licPlatesOne").innerHTML = licenseStackOne;
+      // }
+
+      // else
+      // {
+      //   var summ = "\nTotal: " + dailyTotal;
+      //   licenseStack.push(summ);
+      //   summ = "\nCars at $10: " + priceCount[0];
+      //   licenseStack.push(summ);
+      //   summ = "\nCars at $20: " + priceCount[1];
+      //   licenseStack.push(summ);
+      //   summ = "\nCars at $30: " + priceCount[2];
+      //   licenseStack.push(summ);
+      //   document.getElementById("licPlates").innerHTML = licenseStack;
+      // }
         
 
     }
@@ -372,16 +413,16 @@
         if(credPayment == 0)
         {
             cashNoOne--;
-            cashOne -= ticketPrice;
+            cashOne -= licenseStackOne[licenseStackOne.length-1][1];
         }
         else if(credPayment == 1)
         {
             creditNoOne--;
-            creditOne -= ticketPrice;
+            creditOne -= licenseStackOne[licenseStackOne.length-1][1];
         }
 
         numbCarsOne--;
-        dailyTotalOne -= ticketPrice;
+        dailyTotalOne -= licenseStackOne[licenseStackOne.length-1][1];
         licenseStackOne.pop();
 
         //document.getElementById("licPlates").innerHTML = licenseStack[licenseStack.length - 1];
@@ -397,16 +438,16 @@
         if(credPayment == 0)
         {
             cashNo--;
-            cash -= ticketPrice;
+            cash -= licenseStack[licenseStack.length-1][1];
         }
         else if(credPayment == 1)
         {
             creditNo--;
-            credit -= ticketPrice;
+            credit -= licenseStack[licenseStack.length-1][1];
         }
 
         numbCars--;
-        dailyTotal -= ticketPrice;
+        dailyTotal -= licenseStack[licenseStack.length-1][1];
         licenseStack.pop();
 
         //document.getElementById("licPlates").innerHTML = licenseStack[licenseStack.length - 1];
