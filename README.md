@@ -1,5 +1,5 @@
-# senior-project-parking-system
-senior-project-parking-system created by GitHub Classroom
+# Little Man Parking Ticket System
+Gabriel Ilomuanya
 
 Little Man Parking System Website Temporary Link:
-https://little-man-parking-system.webflow.io/
+https://csc4790-fall2021-org.github.io/senior-project-parking-system/lm-homepage.html
